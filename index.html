@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Work</title>
+    <style>
+        /* Estilos aquí (mantén el código que ya tienes) */
+    </style>
+</head>
+<body>
+    <!-- Tu contenido HTML aquí -->
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const resultDiv = document.getElementById('result');
+            const copyButton = document.getElementById('copyButton');
+
+            fetch(`/api/search?email=${encodeURIComponent(email)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message && data.message.includes("Contacto encontrado")) {
+                        resultDiv.textContent = data.message;
+                        copyButton.style.display = 'block';
+                        document.getElementById('formSelection').style.display = 'block';
+                    } else {
+                        resultDiv.textContent = "El contacto no existe.";
+                        copyButton.style.display = 'none';
+                        document.getElementById('formSelection').style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    resultDiv.textContent = "Error al conectar con la API.";
+                    console.error("Error:", error);
+                });
+        });
+
+        function openExternal(url) {
+            window.open(url, "_blank");
+        }
+    </script>
+</body>
+</html>
